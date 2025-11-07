@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Hero Section -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/#home</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Skills Section -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/#skills</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Experience Section -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/#experience</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Projects Section -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/#projects</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Certificates Section -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/#certificates</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Contact Section -->
+  <url>
+    <loc>https://ytallo-portfolio.tech/#contact</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- External Links -->
+  <!-- GitHub -->
+  <url>
+    <loc>https://github.com/Ytallo-Gabriel-Oliveira-da-Silva</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- LinkedIn -->
+  <url>
+    <loc>https://www.linkedin.com/in/ytallo-gabriel-863899279</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Instagram Personal -->
+  <url>
+    <loc>https://instagram.com/ytallo_gabriel.dev</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Instagram Edits -->
+  <url>
+    <loc>https://instagram.com/ytallo_editz</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Garra Inc Technology -->
+  <url>
+    <loc>https://instagram.com/garra_inc_technology</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Garra Studios -->
+  <url>
+    <loc>https://instagram.com/garrastudios</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Certificates Link -->
+  <url>
+    <loc>https://bit.ly/3SDNw1G</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

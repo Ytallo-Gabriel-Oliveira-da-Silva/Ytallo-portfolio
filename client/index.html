@@ -1,28 +1,223 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <link rel="icon" type="image/png" href="%VITE_APP_LOGO%" />
     <link rel="apple-touch-icon" href="%VITE_APP_LOGO%" />
-    <title>%VITE_APP_TITLE%</title>
-    <!-- Add Google Fonts here, example:
+    <title>Ytallo Gabriel - Desenvolvedor Full Stack & Empreendedor</title>
+
+    <!-- ========== SEO Premium ========== -->
+    <!-- Meta Descrição -->
+    <meta name="description" content="Portfólio profissional de Ytallo Gabriel - Desenvolvedor Full Stack, Empreendedor e Especialista em Tecnologia. Confira meus projetos, habilidades e experiência em React, Node.js, Python e muito mais." />
+    <meta name="keywords" content="Ytallo Gabriel, desenvolvedor, full stack, React, Node.js, Python, portfólio, tecnologia, empreendedor, Pernambuco, desenvolvedor web, programador" />
+    <meta name="author" content="Ytallo Gabriel" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="language" content="Portuguese" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ytallo-portfolio.tech/" />
+
+    <!-- Open Graph (Facebook, LinkedIn, etc) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ytallo-portfolio.tech/" />
+    <meta property="og:title" content="Ytallo Gabriel - Desenvolvedor Full Stack & Empreendedor" />
+    <meta property="og:description" content="Portfólio profissional com projetos em React, Node.js, Python, Firebase, AWS e muito mais. Especialista em tecnologia e inovação." />
+    <meta property="og:image" content="https://ytallo-portfolio.tech/profile-logo.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Ytallo Gabriel Portfolio" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://ytallo-portfolio.tech/" />
+    <meta name="twitter:title" content="Ytallo Gabriel - Desenvolvedor Full Stack & Empreendedor" />
+    <meta name="twitter:description" content="Portfólio profissional com projetos em React, Node.js, Python, Firebase, AWS e muito mais." />
+    <meta name="twitter:image" content="https://ytallo-portfolio.tech/profile-logo.jpg" />
+
+    <!-- Preconnect para Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    -->
+    <link rel="preconnect" href="https://forge.manus.ai" />
+    <link rel="preconnect" href="https://manus-analytics.com" />
+
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://github.com" />
+    <link rel="dns-prefetch" href="https://linkedin.com" />
+    <link rel="dns-prefetch" href="https://instagram.com" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- Schema.org - Structured Data (JSON-LD) - Pessoa -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://ytallo-portfolio.tech",
+      "name": "Ytallo Gabriel",
+      "url": "https://ytallo-portfolio.tech",
+      "image": "https://ytallo-portfolio.tech/profile-logo.jpg",
+      "description": "Desenvolvedor Full Stack, Empreendedor e Especialista em Tecnologia",
+      "jobTitle": "Full Stack Developer & Entrepreneur",
+      "email": "ytallok644549@gmail.com",
+      "telephone": "+5581994323471",
+      "worksFor": {
+        "@type": "Organization",
+        "@id": "https://ytallo-portfolio.tech",
+        "name": "Garra Inc"
+      },
+      "sameAs": [
+        "https://github.com/Ytallo-Gabriel-Oliveira-da-Silva",
+        "https://www.linkedin.com/in/ytallo-gabriel-863899279",
+        "https://instagram.com/ytallo_gabriel.dev",
+        "https://instagram.com/garra_inc_technology"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "@id": "https://ytallo-portfolio.tech#address",
+        "streetAddress": "Paulista",
+        "addressLocality": "Paulista",
+        "addressRegion": "PE",
+        "postalCode": "53000-000",
+        "addressCountry": "BR"
+      },
+      "knowsAbout": [
+        "React",
+        "Node.js",
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "Firebase",
+        "AWS",
+        "MySQL",
+        "MongoDB",
+        "Web Development",
+        "Full Stack Development",
+        "Entrepreneurship",
+        "Video Editing",
+        "Digital Marketing"
+      ]
+    }
+    </script>
+
+    <!-- Schema.org - Organização -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://ytallo-portfolio.tech",
+      "name": "Garra Inc",
+      "url": "https://ytallo-portfolio.tech",
+      "logo": "https://ytallo-portfolio.tech/profile-logo.jpg",
+      "description": "Empresa de Tecnologia e Empreendedorismo especializada em desenvolvimento web e soluções inovadoras",
+      "foundingDate": "2023",
+      "founder": {
+        "@type": "Person",
+        "name": "Ytallo Gabriel"
+      },
+      "sameAs": [
+        "https://instagram.com/garra_inc_technology",
+        "https://instagram.com/garrastudios",
+        "https://github.com/Ytallo-Gabriel-Oliveira-da-Silva"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "@id": "https://ytallo-portfolio.tech#contact",
+        "contactType": "Customer Service",
+        "email": "ytallok644549@gmail.com",
+        "telephone": "+5581994323471"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Paulista",
+        "addressLocality": "Paulista",
+        "addressRegion": "PE",
+        "postalCode": "53000-000",
+        "addressCountry": "BR"
+      }
+    }
+    </script>
+
+    <!-- Schema.org - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://ytallo-portfolio.tech/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Projetos",
+          "item": "https://ytallo-portfolio.tech/#projects"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Habilidades",
+          "item": "https://ytallo-portfolio.tech/#skills"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Contato",
+          "item": "https://ytallo-portfolio.tech/#contact"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Schema.org - FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quem é Ytallo Gabriel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ytallo Gabriel é um desenvolvedor Full Stack, empreendedor e especialista em tecnologia com experiência em React, Node.js, Python, Firebase e AWS."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quais são as principais habilidades de Ytallo Gabriel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Desenvolvimento Frontend (React, TypeScript), Backend (Node.js, Python), Cloud (AWS, Firebase), Bancos de Dados (MySQL, MongoDB) e Empreendedorismo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Como entrar em contato com Ytallo Gabriel?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Você pode entrar em contato através do formulário de contato no site, por email (ytallok644549@gmail.com) ou pelo WhatsApp (+5581994323471)."
+          }
+        }
+      ]
+    }
+    </script>
+
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <script defer src="%VITE_ANALYTICS_ENDPOINT%/umami" data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
   </body>
 
 </html>
