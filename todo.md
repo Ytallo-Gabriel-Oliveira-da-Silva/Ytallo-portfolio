@@ -47,9 +47,10 @@
 ## Entrega
 
 - [x] Revisar todo o conteúdo
-- [ ] Criar checkpoint final
-- [ ] Preparar documentação de uso
-- [ ] Entregar ao usuário
+- [x] Criar checkpoint final
+- [x] Preparar documentação de uso
+- [x] Entregar ao usuário
+- [x] Fazer commit para GitHub
 
 
 ## Sistema de Emails
