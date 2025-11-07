@@ -50,3 +50,12 @@
 - [ ] Criar checkpoint final
 - [ ] Preparar documentação de uso
 - [ ] Entregar ao usuário
+
+
+## Sistema de Emails
+
+- [x] Adicionar backend para processar formulário de contato
+- [x] Implementar envio de emails via formulário
+- [x] Adicionar validação de formulário
+- [x] Implementar feedback visual (loading, sucesso, erro)
+- [x] Testar envio de emails

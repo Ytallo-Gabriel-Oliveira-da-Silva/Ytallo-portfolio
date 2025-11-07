@@ -9,6 +9,8 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SkillCard from "@/components/SkillCard";
@@ -16,6 +18,10 @@ import ProjectCard from "@/components/ProjectCard";
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const sendMessageMutation = trpc.contact.sendMessage.useMutation();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -457,33 +463,63 @@ export default function Home() {
 
           {/* Contact Form */}
           <div className="max-w-2xl mx-auto">
-            <form className="space-y-4 animate-fade-in-up">
+            <form className="space-y-4 animate-fade-in-up" onSubmit={async (e) => {
+              e.preventDefault();
+              setIsSubmitting(true);
+              try {
+                const result = await sendMessageMutation.mutateAsync(formData);
+                if (result.success) {
+                  toast.success(result.message);
+                  setFormData({ name: "", email: "", message: "" });
+                } else {
+                  toast.error(result.message);
+                }
+              } catch (error) {
+                toast.error("Erro ao enviar mensagem. Tente novamente.");
+                console.error(error);
+              } finally {
+                setIsSubmitting(false);
+              }
+            }}>
               <div>
                 <input
                   type="text"
                   placeholder="Seu Nome"
-                  className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 disabled:opacity-50"
+                  required
                 />
               </div>
               <div>
                 <input
                   type="email"
                   placeholder="Seu Email"
-                  className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 disabled:opacity-50"
+                  required
                 />
               </div>
               <div>
                 <textarea
                   placeholder="Sua Mensagem"
                   rows={5}
-                  className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 resize-none"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 resize-none disabled:opacity-50"
+                  required
                 />
               </div>
               <button
                 type="submit"
-                className="w-full px-8 py-3 bg-gradient-to-r from-primary to-secondary text-background font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
+                disabled={isSubmitting}
+                className="w-full px-8 py-3 bg-gradient-to-r from-primary to-secondary text-background font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Enviar Mensagem
+                {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
               </button>
             </form>
           </div>
