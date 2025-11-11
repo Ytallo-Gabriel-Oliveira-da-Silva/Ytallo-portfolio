@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Check } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Language {
-  code: string;
+  code: "pt" | "en" | "es" | "fr" | "de";
   name: string;
   flag: string;
   nativeName: string;
@@ -18,27 +19,13 @@ const languages: Language[] = [
 
 export default function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0]);
+  const { language, setLanguage } = useLanguage();
 
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("selectedLanguage");
-    if (savedLanguage) {
-      const lang = languages.find((l) => l.code === savedLanguage);
-      if (lang) setCurrentLanguage(lang);
-    }
+  const currentLanguage = languages.find((l) => l.code === language) || languages[0];
 
-    const browserLang = navigator.language.split("-")[0];
-    const detectedLang = languages.find((l) => l.code === browserLang);
-    if (detectedLang && !savedLanguage) {
-      setCurrentLanguage(detectedLang);
-    }
-  }, []);
-
-  const handleLanguageChange = (language: Language) => {
-    setCurrentLanguage(language);
-    localStorage.setItem("selectedLanguage", language.code);
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang.code);
     setIsOpen(false);
-    console.log(`Idioma alterado para: ${language.name}`);
   };
 
   return (
@@ -55,20 +42,20 @@ export default function LanguageSwitcher() {
       {isOpen && (
         <>
           <div className="absolute top-full right-0 mt-2 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 w-48 md:w-56">
-            {languages.map((language) => (
+            {languages.map((lang) => (
               <button
-                key={language.code}
-                onClick={() => handleLanguageChange(language)}
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang)}
                 className="w-full px-4 py-3 text-left hover:bg-slate-800 transition-colors duration-200 flex items-center justify-between border-b border-slate-700 last:border-b-0"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{language.flag}</span>
+                  <span className="text-2xl">{lang.flag}</span>
                   <div>
-                    <p className="font-semibold text-white text-sm">{language.name}</p>
-                    <p className="text-xs text-slate-400">{language.nativeName}</p>
+                    <p className="font-semibold text-white text-sm">{lang.name}</p>
+                    <p className="text-xs text-slate-400">{lang.nativeName}</p>
                   </div>
                 </div>
-                {currentLanguage.code === language.code && (
+                {language === lang.code && (
                   <Check size={16} className="text-cyan-400 animate-pulse" />
                 )}
               </button>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Code2,
   Database,
@@ -17,6 +18,7 @@ import SkillCard from "@/components/SkillCard";
 import ProjectCard from "@/components/ProjectCard";
 
 export default function Home() {
+  const { t } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,21 +56,19 @@ export default function Home() {
               <div className="mb-6 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-primary animate-spin" />
                 <span className="text-primary font-semibold">
-                  Bem-vindo ao meu portfólio
+                  {t("welcome")}
                 </span>
               </div>
 
               <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
-                Olá, sou{" "}
+                {t("greeting")}{" "}
                 <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Ytallo Gabriel
+                  {t("name")}
                 </span>
               </h1>
 
               <p className="text-xl text-muted-foreground mb-6 leading-relaxed">
-                Desenvolvedor Full-Stack & Empreendedor apaixonado por criar
-                soluções inovadoras com tecnologia. Trabalho com React, Node.js,
-                Python e muito mais.
+                {t("title")} {t("description")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -76,14 +76,14 @@ export default function Home() {
                   onClick={() => scrollToSection("projects")}
                   className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-background font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center gap-2 group"
                 >
-                  Ver Projetos
+                  {t("viewProjects")}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => scrollToSection("contact")}
                   className="px-8 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300"
                 >
-                  Entrar em Contato
+                  {t("contactMe")}
                 </button>
               </div>
 
@@ -91,15 +91,15 @@ export default function Home() {
               <div className="grid grid-cols-3 gap-4 pt-8 border-t border-border">
                 <div>
                   <div className="text-2xl font-bold text-primary">17</div>
-                  <div className="text-sm text-muted-foreground">Anos</div>
+                  <div className="text-sm text-muted-foreground">{t("years")}</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-secondary">10+</div>
-                  <div className="text-sm text-muted-foreground">Projetos</div>
+                  <div className="text-sm text-muted-foreground">{t("projects_count")}</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-accent">15+</div>
-                  <div className="text-sm text-muted-foreground">Certificados</div>
+                  <div className="text-sm text-muted-foreground">{t("certificates")}</div>
                 </div>
               </div>
             </div>
@@ -126,11 +126,10 @@ export default function Home() {
         <div className="container relative z-10">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Habilidades <span className="text-primary">Técnicas</span>
+              {t("skillsTitle")} <span className="text-primary">{t("skillsTitle").split(" ")[1]}</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Tecnologias e ferramentas que domino para criar soluções
-              inovadoras
+              {t("skillsSubtitle")}
             </p>
           </div>
 
@@ -192,10 +191,10 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Experiência <span className="text-secondary">Profissional</span>
+              {t("experienceTitle")} <span className="text-secondary">{t("experienceTitle").split(" ")[1]}</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Minha jornada no desenvolvimento e empreendedorismo
+              {t("experienceSubtitle")}
             </p>
           </div>
 
@@ -208,14 +207,13 @@ export default function Home() {
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-semibold text-foreground">
-                    Empresário Individual Autônomo - MEI
+                    {t("mei")}
                   </h3>
                   <p className="text-muted-foreground mb-2">
                     Ytallo Gabriel da Silva | Desde 04/2024
                   </p>
                   <p className="text-foreground">
-                    Proprietário de MEI para suportar projetos, contratos,
-                    eventos e parcerias. CNPJ: 60.966.649/0001-93
+                    {t("meiDescription")}
                   </p>
                 </div>
               </div>
@@ -229,14 +227,13 @@ export default function Home() {
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-semibold text-foreground">
-                    Ensino Técnico em Desenvolvimento de Sistemas
+                    {t("ete")}
                   </h3>
                   <p className="text-muted-foreground mb-2">
                     ETE Ginásio Pernambucano | 2023 - 2025
                   </p>
                   <p className="text-foreground">
-                    Formação técnica em desenvolvimento de sistemas com foco em
-                    programação, robótica e física.
+                    {t("eteDescription")}
                   </p>
                 </div>
               </div>
@@ -250,14 +247,13 @@ export default function Home() {
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-semibold text-foreground">
-                    Cursos e Imersões - Alura
+                    {t("alura")}
                   </h3>
                   <p className="text-muted-foreground mb-2">
                     2024 - 2025
                   </p>
                   <p className="text-foreground">
-                    Imersão Front-end, Imersão DEV com Google Gemini, HTML &
-                    CSS, Dados com Python e muito mais.
+                    {t("aluraDescription")}
                   </p>
                 </div>
               </div>
@@ -271,11 +267,10 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Projetos <span className="text-accent">em Destaque</span>
+              {t("projectsTitle")} <span className="text-accent">{t("projectsTitle").split(" ").slice(1).join(" ")}</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Alguns dos meus melhores trabalhos desenvolvidos com tecnologias
-              modernas
+              {t("projectsSubtitle")}
             </p>
           </div>
 
@@ -323,7 +318,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300"
             >
-              Ver mais no GitHub
+              {t("viewAll")}
               <ArrowRight size={18} />
             </a>
           </div>
@@ -335,10 +330,10 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Certificados e <span className="text-primary">Conquistas</span>
+              {t("certificatesTitle")} <span className="text-primary">{t("certificatesTitle").split(" ").slice(1).join(" ")}</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Reconhecimento das minhas habilidades e dedicação
+              {t("certificatesSubtitle")}
             </p>
           </div>
 
@@ -404,7 +399,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-secondary text-background font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
             >
-              Ver Todos os Certificados
+              {t("viewCertificates")}
               <ArrowRight size={18} />
             </a>
           </div>
@@ -416,11 +411,10 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Vamos <span className="text-accent">Conversar</span>?
+              {t("contactTitle")}
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Estou sempre aberto para novas oportunidades, parcerias e
-              conversas interessantes
+              {t("contactSubtitle")}
             </p>
           </div>
 
@@ -484,7 +478,7 @@ export default function Home() {
               <div>
                 <input
                   type="text"
-                  placeholder="Seu Nome"
+                  placeholder={t("yourName")}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   disabled={isSubmitting}
@@ -495,7 +489,7 @@ export default function Home() {
               <div>
                 <input
                   type="email"
-                  placeholder="Seu Email"
+                  placeholder={t("yourEmail")}
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   disabled={isSubmitting}
@@ -505,7 +499,7 @@ export default function Home() {
               </div>
               <div>
                 <textarea
-                  placeholder="Sua Mensagem"
+                  placeholder={t("yourMessage")}
                   rows={5}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -519,7 +513,7 @@ export default function Home() {
                 disabled={isSubmitting}
                 className="w-full px-8 py-3 bg-gradient-to-r from-primary to-secondary text-background font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
+                {isSubmitting ? `${t("sendMessage").split(" ")[0]}...` : t("sendMessage")}
               </button>
             </form>
           </div>
