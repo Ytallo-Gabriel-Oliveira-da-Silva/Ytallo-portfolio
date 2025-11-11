@@ -64,5 +64,6 @@
 
 ### Alterações Solicitadas
 
-- [x] Alterar logo do site para a foto do usuário (415025.jpg)
+-- [x] Alterar logo do site para a foto do usuário (415025.jpg)
 - [x] Implementar sistema de SEO Premium (meta tags, schema.org, Open Graph, etc)
+- [x] Implementar seletor de idiomas com 5 linguagens principais (Português, Inglês, Espanhol, Francês, Alemão)
