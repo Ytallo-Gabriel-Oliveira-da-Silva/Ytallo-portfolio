@@ -78,7 +78,6 @@ export default function Footer() {
             </h3>
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>📍 Paulista - Pernambuco, Brasil</p>
-              <p>📱 (81) 99432-3471</p>
               <p>✉️ ytallok644549@gmail.com</p>
             </div>
           </div>

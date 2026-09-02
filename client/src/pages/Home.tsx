@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Code2,
@@ -9,6 +10,7 @@ import {
   Award,
   ArrowRight,
   Sparkles,
+  GraduationCap,
 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -19,6 +21,7 @@ import ProjectCard from "@/components/ProjectCard";
 
 export default function Home() {
   const { t } = useLanguage();
+  const [, setLocation] = useLocation();
   const [scrollY, setScrollY] = useState(0);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -80,6 +83,12 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
+                  onClick={() => setLocation("/curriculo")}
+                  className="px-8 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300"
+                >
+                  Currículo
+                </button>
+                <button
                   onClick={() => scrollToSection("contact")}
                   className="px-8 py-3 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300"
                 >
@@ -90,7 +99,7 @@ export default function Home() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-4 pt-8 border-t border-border">
                 <div>
-                  <div className="text-2xl font-bold text-primary">17</div>
+                  <div className="text-2xl font-bold text-primary">18</div>
                   <div className="text-sm text-muted-foreground">{t("years")}</div>
                 </div>
                 <div>
@@ -186,12 +195,79 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Formation Section */}
+      <section id="formation" className="py-20 px-4 bg-card/50">
+        <div className="container">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Formação Acadêmica
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Minha trajetória acadêmica e formação técnica em tecnologia.
+            </p>
+          </div>
+
+          <div className="space-y-5 max-w-4xl mx-auto">
+            <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary p-2.5 flex-shrink-0">
+                  <GraduationCap className="w-full h-full text-white" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    Tecnólogo em Análise e Desenvolvimento de Sistemas
+                  </h3>
+                  <p className="text-muted-foreground mb-2">UNIGRANDE | Em andamento</p>
+                  <p className="text-foreground">
+                    Formação acadêmica em desenvolvimento de sistemas, análise de requisitos, arquitetura de software, lógica e soluções digitais.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-accent p-2.5 flex-shrink-0">
+                  <GraduationCap className="w-full h-full text-white" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    Escola Técnica Estadual Ginásio Pernambucano - Técnico em Análise e Desenvolvimento de Sistemas
+                  </h3>
+                  <p className="text-muted-foreground mb-2">Concluído em 2025</p>
+                  <p className="text-foreground">
+                    Formação técnica com foco em programação, lógica, desenvolvimento de software e boas práticas de criação de soluções.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-accent to-pink-600 p-2.5 flex-shrink-0">
+                  <GraduationCap className="w-full h-full text-white" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    Escola Técnica Estadual Ginásio Pernambucano - Ensino Médio
+                  </h3>
+                  <p className="text-muted-foreground mb-2">Concluído em 2025</p>
+                  <p className="text-foreground">
+                    Conclusão do ensino médio com formação de base acadêmica e desenvolvimento de pensamento crítico e técnico.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Experience Section */}
       <section id="experience" className="py-20 px-4 bg-card/50">
         <div className="container">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {t("experienceTitle")} <span className="text-secondary">{t("experienceTitle").split(" ")[1]}</span>
+              {t("experienceTitle")}
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               {t("experienceSubtitle")}
@@ -199,7 +275,7 @@ export default function Home() {
           </div>
 
           <div className="space-y-8">
-            {/* MEI */}
+            {/* Faculdade */}
             <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary p-2.5 flex-shrink-0">
@@ -207,13 +283,33 @@ export default function Home() {
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-semibold text-foreground">
-                    {t("mei")}
+                    Faculdade: Tecnólogo em Análise e Desenvolvimento de Sistemas
                   </h3>
                   <p className="text-muted-foreground mb-2">
-                    Ytallo Gabriel da Silva | Desde 04/2024
+                    UNIGRANDE | Em andamento
                   </p>
                   <p className="text-foreground">
-                    {t("meiDescription")}
+                    Formação acadêmica com foco em desenvolvimento de sistemas, análise de requisitos, arquitetura de software e soluções digitais.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Cybersegurança */}
+            <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-accent p-2.5 flex-shrink-0">
+                  <Award className="w-full h-full text-white" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    Curso de Cyber Segurança
+                  </h3>
+                  <p className="text-muted-foreground mb-2">
+                    DIO + Riachuelo | Em andamento
+                  </p>
+                  <p className="text-foreground">
+                    Aprendizado em fundamentos de segurança digital, proteção de sistemas, boas práticas e consciência em cybersegurança.
                   </p>
                 </div>
               </div>
@@ -222,38 +318,18 @@ export default function Home() {
             {/* ETE */}
             <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary to-accent p-2.5 flex-shrink-0">
-                  <Award className="w-full h-full text-white" />
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    {t("ete")}
-                  </h3>
-                  <p className="text-muted-foreground mb-2">
-                    ETE Ginásio Pernambucano | 2023 - 2025
-                  </p>
-                  <p className="text-foreground">
-                    {t("eteDescription")}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Alura */}
-            <div className="animate-fade-in-up border border-border rounded-lg p-6 hover-glow">
-              <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-accent to-pink-600 p-2.5 flex-shrink-0">
                   <Code2 className="w-full h-full text-white" />
                 </div>
                 <div className="flex-grow">
                   <h3 className="text-xl font-semibold text-foreground">
-                    {t("alura")}
+                    Técnico em Desenvolvimento de Sistemas
                   </h3>
                   <p className="text-muted-foreground mb-2">
-                    2024 - 2025
+                    ETE Ginásio Pernambucano | 2023 - 2025
                   </p>
                   <p className="text-foreground">
-                    {t("aluraDescription")}
+                    Formação técnica em desenvolvimento de sistemas com foco em programação, lógica, solução de problemas e boas práticas de desenvolvimento.
                   </p>
                 </div>
               </div>
@@ -276,23 +352,11 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <ProjectCard
-              title="Portfólio Ytallo Gabriel"
-              description="Portfólio profissional com design moderno, animações avançadas e responsividade total."
-              technologies={["React", "TypeScript", "Tailwind CSS", "Lucide"]}
-              liveUrl="https://ytallo-gabriel-portfolio.manus.space"
+              title="Hydra AI API"
+              description="API inteligente para integração de IA, automações e serviços modernos com foco em escalabilidade e facilidade de uso."
+              technologies={["Node.js", "TypeScript", "API REST", "IA", "Express"]}
+              githubUrl="https://github.com/Ytallo-Gabriel-Oliveira-da-Silva/Hydra-AI-API"
               featured
-            />
-            <ProjectCard
-              title="Garra Inc. Technology"
-              description="Plataforma de soluções tecnológicas para empresas com foco em inovação."
-              technologies={["React", "Node.js", "Firebase", "AWS"]}
-              githubUrl="https://github.com/Ytallo-Gabriel-Oliveira-da-Silva"
-            />
-            <ProjectCard
-              title="Garra Studios"
-              description="Estúdio criativo com foco em produção de conteúdo visual e edição profissional."
-              technologies={["Design", "Edição", "Criatividade"]}
-              liveUrl="https://instagram.com/garrastudios"
             />
             <ProjectCard
               title="Sistema de Robótica"
@@ -308,6 +372,16 @@ export default function Home() {
               title="API REST"
               description="API robusta desenvolvida com Node.js e Express para gerenciamento de dados."
               technologies={["Node.js", "Express", "MySQL", "REST"]}
+            />
+            <ProjectCard
+              title="Dashboard de Gestão"
+              description="Painel para análise de dados e organização de processos com foco em usabilidade e informações em tempo real."
+              technologies={["React", "TypeScript", "Dashboard", "UX"]}
+            />
+            <ProjectCard
+              title="Automação de Processos"
+              description="Fluxos automatizados para reduzir tarefas repetitivas e aumentar a produtividade digital."
+              technologies={["Python", "APIs", "Automação", "Integração"]}
             />
           </div>
 
@@ -330,7 +404,7 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {t("certificatesTitle")} <span className="text-primary">{t("certificatesTitle").split(" ").slice(1).join(" ")}</span>
+              {t("certificatesTitle")}
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               {t("certificatesSubtitle")}
@@ -340,33 +414,33 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-6">
             {[
               {
-                title: "27ª Olimpíada Brasileira de Astronomia e Astronáutica",
-                org: "OBA S.A.B",
-                year: "2024",
+                title: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+                org: "Unigrande",
+                year: "Em andamento",
               },
               {
-                title: "18ª Mostra Brasileira de Foguetes",
-                org: "OBA MOBFOG",
-                year: "2024",
-              },
-              {
-                title: "Monitoria Física Robótica",
+                title: "Técnico em Desenvolvimento de Sistemas",
                 org: "ETE Ginásio Pernambucano",
-                year: "2023",
+                year: "Concluído",
               },
               {
-                title: "Cursos de Tecnologia para Adolescentes",
-                org: "Samsung - Solve for Tomorrow",
-                year: "2024",
+                title: "Cyber Segurança",
+                org: "DIO + Riachuelo",
+                year: "Em andamento",
               },
               {
-                title: "Imersão Front-end 2ª edição",
-                org: "Alura",
-                year: "2024",
+                title: "Monitoria Voluntária Bolsista em Robótica e Física",
+                org: "ETE Ginásio Pernambucano",
+                year: "2023, 2024 e 2025",
               },
               {
                 title: "Imersão DEV com Google Gemini",
-                org: "Alura & Google",
+                org: "Alura + Google",
+                year: "Concluído",
+              },
+              {
+                title: "8ª ONDA",
+                org: "Olimpíada Nacional de Aplicativos",
                 year: "2024",
               },
             ].map((cert, index) => (
@@ -394,9 +468,7 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <a
-              href="http://bit.ly/3SDNw1G"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/certificados"
               className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-secondary text-background font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/50 transition-all duration-300"
             >
               {t("viewCertificates")}
@@ -418,19 +490,13 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-3xl mx-auto">
             {[
               {
                 icon: "📧",
                 title: "Email",
                 value: "ytallok644549@gmail.com",
                 href: "mailto:ytallok644549@gmail.com",
-              },
-              {
-                icon: "📱",
-                title: "WhatsApp",
-                value: "(81) 99432-3471",
-                href: "https://wa.me/5581994323471",
               },
               {
                 icon: "📍",
