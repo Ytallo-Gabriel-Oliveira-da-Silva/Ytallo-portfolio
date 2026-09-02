@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useRoute } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { ArrowLeft, ArrowRight, Award, BookOpen, ExternalLink, Home } from "lucide-react";
+import PdfViewer from "../components/PdfViewer";
 
 export type Certificate = {
   slug: string;
@@ -216,7 +217,7 @@ const certificates: Certificate[] = [
 
 function CertificatesPage() {
   const [, setLocation] = useLocation();
-  const [uploadedFiles, setUploadedFiles] = useState<Array<{ slug: string; name: string; url: string }>>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ slug: string; name: string; url: string; title?: string; institution?: string; status?: string }>>([]);
 
   useEffect(() => {
     fetch("/api/public/manifest")
@@ -225,8 +226,11 @@ function CertificatesPage() {
         const items = manifest?.certificados ? Object.entries(manifest.certificados) : [];
         setUploadedFiles(
           items.map(([slug, value]: [string, any]) => ({
-            slug,
+            slug: String(value?.slug || slug),
             name: value?.name || slug,
+            title: value?.title || value?.name || slug,
+            institution: value?.institution || "Arquivo enviado via painel admin",
+            status: value?.status || "Disponível",
             url: value?.url || "#",
           }))
         );
@@ -237,9 +241,9 @@ function CertificatesPage() {
   const allCertificates = useMemo(() => {
     const dynamic = uploadedFiles.map((file) => ({
       slug: file.slug,
-      title: file.name.replace(/\.[^/.]+$/, ""),
-      institution: "Arquivo enviado via painel admin",
-      status: "Disponível",
+      title: file.title || file.name.replace(/\.[^/.]+$/, ""),
+      institution: file.institution || "Arquivo enviado via painel admin",
+      status: file.status || "Disponível",
       year: "Atualizado",
       category: "PDF",
       description: "Arquivo carregado diretamente na central de gestão do site.",
@@ -247,6 +251,7 @@ function CertificatesPage() {
       image: "/profile-logo.jpg",
       syllabus: ["PDF", "Atualização administrada", "Disponível no site"],
       badge: "PDF",
+      pdfUrl: file.url,
     }));
 
     return [...dynamic, ...certificates];
@@ -322,8 +327,47 @@ function CertificatesPage() {
 export function CertificateDetailPage() {
   const [match, params] = useRoute("/certificado/:slug");
   const [, setLocation] = useLocation();
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ slug: string; title?: string; name: string; institution?: string; status?: string; url: string }>>([]);
 
-  const certificate = certificates.find((item) => item.slug === params?.slug) ?? certificates[0];
+  useEffect(() => {
+    fetch("/api/public/manifest")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((manifest) => {
+        const items = manifest?.certificados ? Object.entries(manifest.certificados) : [];
+        setUploadedFiles(
+          items.map(([key, value]: [string, any]) => ({
+            slug: String(value?.slug || key),
+            title: value?.title || value?.name || key,
+            name: value?.name || value?.title || key,
+            institution: value?.institution || "Arquivo enviado via painel admin",
+            status: value?.status || "Disponível",
+            url: value?.url || "#",
+          }))
+        );
+      })
+      .catch(() => setUploadedFiles([]));
+  }, []);
+
+  const allCertificates = useMemo(() => {
+    const dynamic = uploadedFiles.map((file) => ({
+      slug: file.slug,
+      title: file.title || file.name.replace(/\.[^/.]+$/, ""),
+      institution: file.institution || "Arquivo enviado via painel admin",
+      status: file.status || "Disponível",
+      year: "Atualizado",
+      category: "PDF",
+      description: "Arquivo carregado diretamente na central de gestão do site.",
+      highlight: "Arquivo atualizado no painel administrativo.",
+      image: "/profile-logo.jpg",
+      syllabus: ["PDF", "Atualização administrada", "Disponível no site"],
+      badge: "PDF",
+      pdfUrl: file.url,
+    }));
+
+    return [...dynamic, ...certificates];
+  }, [uploadedFiles]);
+
+  const certificate = allCertificates.find((item) => item.slug === params?.slug) ?? allCertificates[0] ?? null;
 
   if (!match || !certificate) {
     return (
@@ -342,6 +386,8 @@ export function CertificateDetailPage() {
       </div>
     );
   }
+
+  const pdfUrl = (certificate as any).pdfUrl || "";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -365,16 +411,26 @@ export function CertificateDetailPage() {
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[0_0_30px_rgba(0,217,255,0.08)]">
-          <div className="grid gap-0 lg:grid-cols-[1.1fr_1.4fr]">
-            <div className="border-b border-border bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-6 lg:border-b-0 lg:border-r">
-              <div className="flex h-full min-h-[260px] items-center justify-center rounded-2xl border border-dashed border-primary/30 bg-background/40 p-6 text-center">
-                <div>
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Award size={28} />
+          <div className="grid gap-0 lg:grid-cols-[1.2fr_1.3fr]">
+            <div className="border-b border-border bg-[#0b1220] p-3 lg:border-b-0 lg:border-r">
+              <div className="flex h-full min-h-[560px] items-center justify-center overflow-hidden rounded-2xl border border-primary/20 bg-[#0f172a] p-2">
+                {pdfUrl ? (
+                  <PdfViewer
+                    url={pdfUrl}
+                    title={certificate.title}
+                    className="h-full min-h-[520px] w-full rounded-xl"
+                  />
+                ) : (
+                  <div className="flex h-full min-h-[520px] w-full items-center justify-center text-center text-muted-foreground">
+                    <div>
+                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <Award size={28} />
+                      </div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Visualização</p>
+                      <p className="mt-3 text-sm text-muted-foreground">Este certificado ainda não possui arquivo anexado.</p>
+                    </div>
                   </div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Mockup do certificado</p>
-                  <p className="mt-3 text-sm text-muted-foreground">Área reservada para imagem do documento</p>
-                </div>
+                )}
               </div>
             </div>
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildCertificateSlug, normalizeManifest } from "./manifest";
+import { buildCertificateSlug, lookupCertificateByIdOrSlug, normalizeManifest } from "./manifest";
 
 describe("manifest helpers", () => {
   it("gerencia slug em minúsculas e com traço", () => {
@@ -33,5 +33,26 @@ describe("manifest helpers", () => {
       url: "/uploads/certificados/certificado-de-ux.pdf",
       hasImage: false,
     });
+  });
+
+  it("localiza por id, slug ou numero mesmo com formato variado", () => {
+    const manifest = normalizeManifest({
+      curriculos: { pt: null, en: null },
+      certificados: {
+        "certificado-de-ux": {
+          id: "cert-001",
+          name: "Certificado de UX",
+          title: "Certificado de UX",
+          institution: "Alura",
+          status: "Ativo",
+          slug: "certificado-de-ux",
+          url: "/uploads/certificados/certificado-de-ux.pdf",
+          hasImage: false,
+        },
+      },
+    });
+
+    expect(lookupCertificateByIdOrSlug(manifest, "cert001")).toMatchObject({ id: "cert-001" });
+    expect(lookupCertificateByIdOrSlug(manifest, "001")).toMatchObject({ id: "cert-001" });
   });
 });

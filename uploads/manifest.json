@@ -1,0 +1,53 @@
+{
+  "curriculos": {
+    "pt": {
+      "name": "curriculo-pt (1).pdf",
+      "type": "application/pdf",
+      "size": 3923894,
+      "url": "/uploads/curriculos/curriculo-pt.pdf",
+      "uploadedAt": "2026-09-02T05:33:41.130Z"
+    },
+    "en": null
+  },
+  "certificados": {
+    "cert-001": {
+      "id": "cert-001",
+      "slug": "imersao-front-end-alura",
+      "name": "Imersão Front-End",
+      "title": "Imersão Front-End",
+      "institution": "ALURA",
+      "status": "Concluído",
+      "url": "/uploads/certificados/cert-001.pdf",
+      "type": "application/pdf",
+      "size": 0,
+      "hasImage": false,
+      "uploadedAt": "2026-09-02T00:00:00Z"
+    },
+    "cert-002": {
+      "id": "cert-002",
+      "slug": "imersao-front-end-2-edicao-alura",
+      "name": "Imersão Front-End 2ª Edição",
+      "title": "Imersão Front-End 2ª Edição",
+      "institution": "ALURA",
+      "status": "Concluído",
+      "url": "/uploads/certificados/cert-002.pdf",
+      "type": "application/pdf",
+      "size": 0,
+      "hasImage": false,
+      "uploadedAt": "2026-09-02T00:00:00Z"
+    },
+    "cert-003": {
+      "id": "cert-003",
+      "slug": "react-dev-alura",
+      "name": "React DEV",
+      "title": "React DEV",
+      "institution": "ALURA",
+      "status": "Concluído",
+      "url": "/uploads/certificados/181571-1788327105033.jpg",
+      "type": "image/jpeg",
+      "size": 82254,
+      "hasImage": true,
+      "uploadedAt": "2026-09-02T05:31:45.037Z"
+    }
+  }
+}

@@ -81,15 +81,41 @@ export function normalizeManifest(rawManifest: any): ManifestState {
   };
 }
 
+function normalizeSearchToken(value: string | undefined | null) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
 export function lookupCertificateByIdOrSlug(manifest: any, query: string) {
-  const normalized = String(query || "").trim().toLowerCase();
-  if (!normalized) return null;
+  const rawQuery = String(query || "").trim();
+  if (!rawQuery) return null;
+
+  const compactQuery = normalizeSearchToken(rawQuery);
+  if (!compactQuery) return null;
 
   const items = Object.values(normalizeManifest(manifest).certificados ?? {});
+
   return (
     items.find((item: any) => {
       const values = [item.id, item.slug, item.name, item.title, item.institution];
-      return values.some((value) => String(value || "").toLowerCase().includes(normalized));
+
+      return values.some((value) => {
+        const compactValue = normalizeSearchToken(value);
+        if (!compactValue) return false;
+
+        const digits = String(value ?? "").match(/\d+/g)?.join("") || "";
+
+        return (
+          compactValue.includes(compactQuery) ||
+          compactQuery.includes(compactValue) ||
+          compactValue.replace(/^cert/, "").includes(compactQuery.replace(/^cert/, "")) ||
+          (digits && compactQuery.includes(digits)) ||
+          (digits && digits.includes(compactQuery))
+        );
+      });
     }) ?? null
   );
 }

@@ -92,19 +92,31 @@ const fileStorage = multer.diskStorage({
       .replace(/[^a-z0-9-_]+/g, "-")
       .replace(/^-+|-+$/g, "") || "certificado";
 
-    cb(null, `${safeKey}-${Date.now()}.pdf`);
+    const extension = path.extname(file.originalname || ".jpg").toLowerCase() || ".jpg";
+    cb(null, `${safeKey}-${Date.now()}${extension}`);
   },
 });
 
 const upload = multer({
   storage: fileStorage,
   fileFilter: (_req, file, cb) => {
-    const allowed = ["application/pdf", "application/octet-stream"];
-    if (allowed.includes(file.mimetype) || file.originalname.toLowerCase().endsWith(".pdf")) {
+    if (file.fieldname === "curriculoPt" || file.fieldname === "curriculoEn") {
+      const allowedPdf = ["application/pdf", "application/octet-stream"];
+      if (allowedPdf.includes(file.mimetype) || file.originalname.toLowerCase().endsWith(".pdf")) {
+        cb(null, true);
+        return;
+      }
+      cb(new Error("Apenas arquivos PDF são permitidos para currículos."));
+      return;
+    }
+
+    const allowedImages = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
+    if (allowedImages.includes(file.mimetype) || /\.(png|jpe?g|webp|gif)$/i.test(file.originalname)) {
       cb(null, true);
       return;
     }
-    cb(new Error("Apenas arquivos PDF são permitidos."));
+
+    cb(new Error("Apenas imagens PNG, JPG, WEBP ou GIF são permitidas para certificados."));
   },
   limits: { fileSize: 20 * 1024 * 1024 },
 });
@@ -136,7 +148,16 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-  app.use("/uploads", express.static(uploadRoot));
+  app.use("/uploads", (req, res, next) => {
+    const requestPath = String(req.originalUrl || "").toLowerCase();
+
+    if (requestPath.endsWith(".pdf")) {
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+    }
+
+    next();
+  }, express.static(uploadRoot));
 
   app.get("/api/public/manifest", (_req, res) => {
     res.json(readManifest());
@@ -214,10 +235,10 @@ async function startServer() {
           title,
           institution: institution || "Arquivo enviado via painel admin",
           status: status || "Disponível",
-          type: file.mimetype || "application/pdf",
+          type: file.mimetype || "image/jpeg",
           size: file.size,
           url: `/uploads/certificados/${path.basename(file.path)}`,
-          hasImage: Boolean(req.body.certificadoHasImage === "true" || req.body.hasImage === "true"),
+          hasImage: true,
           uploadedAt: new Date().toISOString(),
         };
       }
