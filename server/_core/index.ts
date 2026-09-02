@@ -149,8 +149,20 @@ async function startServer() {
   app.get("/api/admin/certificado", requireAdminAuth, (req, res) => {
     const query = String(req.query.q || "").trim();
     const manifest = readManifest();
-    const result = query ? lookupCertificateByIdOrSlug(manifest, query) : null;
-    res.json({ success: true, item: result });
+
+    if (!query) {
+      res.json({ success: true, item: null, items: Object.values(manifest.certificados) });
+      return;
+    }
+
+    const items = Object.values(manifest.certificados ?? {});
+    const filtered = items.filter((item: any) => {
+      const values = [item.id, item.slug, item.name, item.title, item.institution, item.status];
+      return values.some((value) => String(value || "").toLowerCase().includes(query.toLowerCase()));
+    });
+
+    const result = filtered[0] || lookupCertificateByIdOrSlug(manifest, query);
+    res.json({ success: true, item: result || null, items: filtered });
   });
 
   app.post(

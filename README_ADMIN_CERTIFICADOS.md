@@ -44,21 +44,21 @@ Exemplos:
 
 | ID | Nome | Slug | Observações |
 | --- | --- | --- | --- |
-| cert-001 | Certificado de UX | certificado-de-ux | Aguardando revisão |
-| cert-002 | Imersão Front-End | imersao-front-end | Em uso |
-| cert-003 | React DEV | react-dev | Em uso |
-| cert-004 | Google Gemini | google-gemini | Em uso |
-| cert-005 | HTML e CSS | html-e-css | Em uso |
+| cert-001 | Imersão Front-End | imersao-front-end-alura | Em uso |
+| cert-002 | Imersão Front-End 2ª Edição | imersao-front-end-2-edicao-alura | Em uso |
+| cert-003 | React DEV | react-dev-alura | Em uso |
+| cert-004 | Imersão DEV com Google Gemini | imersao-dev-google-gemini | Em uso |
+| cert-005 | HTML e CSS: Ambientes de Desenvolvimento | html-css-ambientes-desenvolvimento | Em uso |
 | cert-006 | Dados com Python | dados-com-python | Em uso |
 | cert-007 | Solve for Tomorrow | solve-for-tomorrow | Em uso |
-| cert-008 | Empreendedorismo | empreendedorismo | Em uso |
-| cert-009 | Cyber Segurança | cyber-seguranca | Em uso |
-| cert-010 | Letramento Digital | letramento-digital | Em uso |
-| cert-011 | ONDA 8 | onda-8 | Em uso |
-| cert-012 | Mostra Brasileira de Foguetes | mostra-brasileira-de-foguetes | Em uso |
-| cert-013 | Olimpíada de Astronomia | olimpiada-de-astronomia | Em uso |
-| cert-014 | Monitoria Robótica e Física | monitoria-robotica-e-fisica | Em uso |
-| cert-015 | Web3 Week | web3-week | Em uso |
+| cert-008 | Empreendedorismo | empreendedorismo-ja-pernambuco | Em uso |
+| cert-009 | Cyber Segurança | cyber-seguranca-dio-riachuelo | Em uso |
+| cert-010 | Letramento Digital | letramento-digital-senai | Em uso |
+| cert-011 | 8ª ONDA | onda-8 | Em uso |
+| cert-012 | 18ª Mostra Brasileira de Foguetes | mostra-brasileira-foguetes | Em uso |
+| cert-013 | Olimpíada Brasileira de Astronomia e Astronáutica | olimpiada-astronomia-astronautica | Em uso |
+| cert-014 | Monitoria Voluntária Bolsista - Robótica e Física | monitoria-robotica-fisica | Em uso |
+| cert-015 | WEB3 Week 6ª Edição | web3-week-6-edicao | Em uso |
 
 ### Currículos
 

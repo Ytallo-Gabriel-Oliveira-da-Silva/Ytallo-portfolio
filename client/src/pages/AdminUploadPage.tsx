@@ -66,6 +66,7 @@ export default function AdminUploadPage() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [foundCertificate, setFoundCertificate] = useState<CertificateItem | null>(null);
+  const [selectedCertificateId, setSelectedCertificateId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isUnlocked) return;
@@ -119,31 +120,38 @@ export default function AdminUploadPage() {
     });
   };
 
-  const handleCertificateSearch = async () => {
-    if (!searchQuery.trim()) {
-      setStatus("Digite um ID, slug ou nome para procurar.");
+  const applyCertificateForm = (item: CertificateItem | null) => {
+    if (!item) {
       return;
     }
 
+    setFoundCertificate(item);
+    setSelectedCertificateId(item.id || null);
+    setCertificateId(item.id || "");
+    setCertificateName(item.name || item.title || "");
+    setCertificateSlug(item.slug || "");
+    setCertificateInstitution(item.institution || "");
+    setCertificateStatus(item.status || "Disponível");
+    setCertificateHasImage(Boolean(item.hasImage));
+  };
+
+  const handleCertificateSearch = async () => {
+    const query = searchQuery.trim();
+
     try {
-      const response = await fetch(`/api/admin/certificado?q=${encodeURIComponent(searchQuery)}`, {
+      const response = await fetch(`/api/admin/certificado?q=${encodeURIComponent(query || "")}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const result = await response.json();
 
       if (!response.ok || !result.item) {
         setFoundCertificate(null);
-        setStatus("Nenhum certificado encontrado com esse identificador.");
+        setSelectedCertificateId(null);
+        setStatus(query ? "Nenhum certificado encontrado com esse identificador." : "Digite um ID, slug ou nome para procurar.");
         return;
       }
 
-      setFoundCertificate(result.item);
-      setCertificateId(result.item.id || "");
-      setCertificateName(result.item.name || result.item.title || "");
-      setCertificateSlug(result.item.slug || "");
-      setCertificateInstitution(result.item.institution || "");
-      setCertificateStatus(result.item.status || "Disponível");
-      setCertificateHasImage(Boolean(result.item.hasImage));
+      applyCertificateForm(result.item);
       setStatus("Item localizado com sucesso. Você pode editar ou trocar o arquivo.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Erro ao buscar item.");
@@ -201,6 +209,7 @@ export default function AdminUploadPage() {
       setCertificateHasImage(false);
       setSearchQuery("");
       setFoundCertificate(null);
+      setSelectedCertificateId(null);
       if (certInput) certInput.value = "";
       if (fileInput) fileInput.value = "";
       if (fileInputEn) fileInputEn.value = "";
@@ -334,6 +343,28 @@ export default function AdminUploadPage() {
               </div>
 
               <div className="mt-4 grid gap-3">
+                {Object.keys(manifest.certificados).length > 0 && (
+                  <div className="rounded-lg border border-border bg-background/50 p-3">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Lista atual</p>
+                    <div className="max-h-40 space-y-2 overflow-auto text-xs text-muted-foreground">
+                      {Object.values(manifest.certificados).map((item) => (
+                        <button
+                          key={item.id || item.slug || item.name}
+                          type="button"
+                          onClick={() => applyCertificateForm(item)}
+                          className={`block w-full rounded-md border px-2 py-2 text-left transition-colors ${
+                            selectedCertificateId === (item.id || item.slug)
+                              ? "border-primary bg-primary/10 text-foreground"
+                              : "border-border bg-background hover:border-primary/50"
+                          }`}
+                        >
+                          <span className="font-semibold text-foreground">{item.id || item.slug}</span> • {item.name || item.title || item.slug}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <label className="block text-sm font-medium text-foreground">
                   ID do certificado
                   <input
