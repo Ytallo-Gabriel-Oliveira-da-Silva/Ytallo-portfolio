@@ -101,12 +101,12 @@ const upload = multer({
   storage: fileStorage,
   fileFilter: (_req, file, cb) => {
     if (file.fieldname === "curriculoPt" || file.fieldname === "curriculoEn") {
-      const allowedPdf = ["application/pdf", "application/octet-stream"];
-      if (allowedPdf.includes(file.mimetype) || file.originalname.toLowerCase().endsWith(".pdf")) {
+      const allowedImages = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
+      if (allowedImages.includes(file.mimetype) || /\.(png|jpe?g|webp|gif)$/i.test(file.originalname)) {
         cb(null, true);
         return;
       }
-      cb(new Error("Apenas arquivos PDF são permitidos para currículos."));
+      cb(new Error("Apenas imagens PNG, JPG, WEBP ou GIF são permitidas para currículos."));
       return;
     }
 

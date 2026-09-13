@@ -347,15 +347,15 @@ export default function AdminUploadPage() {
             </div>
 
             {[
-              { key: "curriculoPt", label: "Currículo — Português" },
-              { key: "curriculoEn", label: "Currículo — Inglês" },
+              { key: "curriculoPt", label: "Currículo — Português (Imagem)" },
+              { key: "curriculoEn", label: "Currículo — Inglês (Imagem)" },
             ].map((field) => (
               <div key={field.key} className="mb-5 rounded-xl border border-border bg-card p-4">
                 <label className="mb-2 block text-sm font-medium text-foreground">{field.label}</label>
                 <input
                   id={field.key}
                   type="file"
-                  accept=".pdf,application/pdf"
+                  accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
                   onChange={(event) => handleFileChange(event, field.key)}
                   className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary"
                 />

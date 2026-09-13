@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowLeft, Download, FileText, Globe, Languages } from "lucide-react";
-import { jsPDF } from "jspdf";
-import PdfViewer from "../components/PdfViewer";
 
 const curriculoData = {
   pt: {
@@ -150,128 +148,45 @@ function createCurriculoPreviewSvg(lang: "pt" | "en") {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-function generatePdfBlob(lang: "pt" | "en") {
-  const pdf = new jsPDF({ unit: "pt", format: "a4" });
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const data = curriculoData[lang];
-
-  pdf.setFillColor(11, 18, 35);
-  pdf.rect(0, 0, pageWidth, 110, "F");
-  pdf.setTextColor(255, 255, 255);
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(22);
-  pdf.text(data.headline, 40, 54);
-
-  pdf.setFontSize(10);
-  pdf.setTextColor(214, 227, 255);
-  pdf.text(data.summary, 40, 76, { maxWidth: pageWidth - 80 });
-
-  let y = 130;
-
-  const printSection = (title: string, items: string[]) => {
-    if (y > pageHeight - 120) {
-      pdf.addPage();
-      y = 50;
-    }
-
-    pdf.setTextColor(12, 18, 35);
-    pdf.setFillColor(221, 234, 255);
-    pdf.roundedRect(40, y, pageWidth - 80, 18, 6, 6, "F");
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.setTextColor(11, 18, 35);
-    pdf.text(title, 52, y + 12);
-
-    y += 28;
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
-    pdf.setTextColor(48, 64, 82);
-
-    items.forEach((item) => {
-      if (y > pageHeight - 50) {
-        pdf.addPage();
-        y = 50;
-      }
-
-      const wrapped = pdf.splitTextToSize(item, pageWidth - 120);
-      pdf.text(wrapped, 52, y);
-      y += wrapped.length * 14 + 8;
-    });
-
-    y += 12;
-  };
-
-  printSection(data.sections.contato, data.contact);
-  printSection(data.sections.formacao, data.formation);
-  printSection(data.sections.habilidades, data.skills);
-  printSection(data.sections.experiencia, data.experience);
-  printSection(data.sections.projetos, data.projects);
-
-  pdf.setFont("helvetica", "italic");
-  pdf.setFontSize(9);
-  pdf.setTextColor(80, 100, 120);
-  pdf.text(data.footer, 40, pageHeight - 30);
-
-  return pdf.output("blob");
-}
-
 export default function CurriculoPage() {
   const [, setLocation] = useLocation();
   const [language, setLanguage] = useState<"pt" | "en">("pt");
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>(createCurriculoPreviewSvg("pt"));
 
   const curriculo = curriculoData[language];
 
   useEffect(() => {
     let isMounted = true;
-    let createdBlobUrl: string | null = null;
-
-    const fallbackPdfUrl = () => {
-      const blob = generatePdfBlob(language);
-      createdBlobUrl = URL.createObjectURL(blob);
-      if (isMounted) {
-        setPdfUrl(createdBlobUrl);
-      }
-    };
 
     fetch("/api/public/manifest")
       .then((response) => (response.ok ? response.json() : null))
       .then((manifest) => {
         if (!isMounted) return;
-        const uploaded = manifest?.curriculos?.[language]?.url;
 
-        if (uploaded) {
-          setPdfUrl(uploaded);
-          setPreviewUrl(null);
+        const uploadedImage = manifest?.curriculos?.[language]?.imageUrl;
+        const uploadedPdf = manifest?.curriculos?.[language]?.url;
+
+        if (uploadedImage) {
+          setImageUrl(uploadedImage);
           return;
         }
 
-        setPdfUrl(null);
-        setPreviewUrl(createCurriculoPreviewSvg(language));
+        if (uploadedPdf && uploadedPdf.toLowerCase().endsWith(".png") || uploadedPdf?.toLowerCase().endsWith(".jpg") || uploadedPdf?.toLowerCase().endsWith(".jpeg") || uploadedPdf?.toLowerCase().endsWith(".webp")) {
+          setImageUrl(uploadedPdf);
+          return;
+        }
+
+        setImageUrl(createCurriculoPreviewSvg(language));
       })
       .catch(() => {
         if (!isMounted) return;
-        setPdfUrl(null);
-        setPreviewUrl(createCurriculoPreviewSvg(language));
+        setImageUrl(createCurriculoPreviewSvg(language));
       });
 
     return () => {
       isMounted = false;
-      if (createdBlobUrl) {
-        URL.revokeObjectURL(createdBlobUrl);
-      }
     };
   }, [language]);
-
-  const downloadPdf = () => {
-    const link = document.createElement("a");
-    link.href = pdfUrl || URL.createObjectURL(generatePdfBlob(language));
-    link.download = `curriculo-${language}.pdf`;
-    link.click();
-  };
 
   return (
     <div className="min-h-screen bg-background text-foreground px-4 py-8 md:px-6">
@@ -335,23 +250,11 @@ export default function CurriculoPage() {
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-[#0f172a] to-[#0b1220] p-3 shadow-[0_0_30px_rgba(0,217,255,0.08)]">
-            {pdfUrl ? (
-              <PdfViewer
-                url={pdfUrl}
-                title="Currículo em PDF"
-                className="h-[clamp(520px,72vh,820px)] w-full"
-              />
-            ) : previewUrl ? (
-              <img
-                src={previewUrl}
-                alt="Pré-visualização do currículo"
-                className="h-auto w-full rounded-xl border border-white/10 bg-background object-contain"
-              />
-            ) : (
-              <div className="flex h-[clamp(520px,72vh,820px)] items-center justify-center text-muted-foreground">
-                Carregando currículo...
-              </div>
-            )}
+            <img
+              src={imageUrl}
+              alt="Pré-visualização do currículo"
+              className="h-auto w-full rounded-xl border border-white/10 bg-background object-contain"
+            />
           </div>
         </div>
       </div>
