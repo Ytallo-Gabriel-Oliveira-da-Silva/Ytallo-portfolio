@@ -8,8 +8,6 @@ Disallow: /api/
 # Sitemap
 Sitemap: https://ytallo-portfolio.tech/sitemap.xml
 
-# Crawl delay (em segundos)
-Crawl-delay: 1
-
-# Request rate (requisições por segundo)
-Request-rate: 1/1s
+# Rotas internas de administração e APIs não devem ser indexadas
+Disallow: /admin
+Disallow: /docs

@@ -14,6 +14,7 @@ import { serveStatic, setupVite } from "./vite";
 import { buildCertificateSlug, normalizeManifest, lookupCertificateByIdOrSlug } from "./manifest";
 
 const uploadRoot = path.resolve(process.cwd(), "uploads");
+const curriculumRoot = path.resolve(process.cwd(), "curriculos");
 const ADMIN_PASSWORD_HASH =
   process.env.ADMIN_UPLOAD_PASSWORD_HASH ||
   "275f5a0985917445c864aac1fc467bcd97ba2ae0f9bf540d0327792a89d1b215b1297e37e6e509b46854b10487c3fae1c2b14bc4129402a150df2c660b9a3c4b";
@@ -69,22 +70,9 @@ function requireAdminAuth(req: any, res: any, next: any) {
 
 const fileStorage = multer.diskStorage({
   destination: (_req, file, cb) => {
-    if (file.fieldname === "curriculoPt" || file.fieldname === "curriculoEn") {
-      cb(null, path.join(uploadRoot, "curriculos"));
-      return;
-    }
     cb(null, path.join(uploadRoot, "certificados"));
   },
   filename: (req, file, cb) => {
-    if (file.fieldname === "curriculoPt") {
-      cb(null, "curriculo-pt.pdf");
-      return;
-    }
-    if (file.fieldname === "curriculoEn") {
-      cb(null, "curriculo-en.pdf");
-      return;
-    }
-
     const safeKey = (req.body.certificadoSlug || req.body.certificadoKey || file.originalname.replace(/\.[^/.]+$/, ""))
       .toString()
       .trim()
@@ -100,16 +88,6 @@ const fileStorage = multer.diskStorage({
 const upload = multer({
   storage: fileStorage,
   fileFilter: (_req, file, cb) => {
-    if (file.fieldname === "curriculoPt" || file.fieldname === "curriculoEn") {
-      const allowedImages = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
-      if (allowedImages.includes(file.mimetype) || /\.(png|jpe?g|webp|gif)$/i.test(file.originalname)) {
-        cb(null, true);
-        return;
-      }
-      cb(new Error("Apenas imagens PNG, JPG, WEBP ou GIF são permitidas para currículos."));
-      return;
-    }
-
     const allowedImages = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
     if (allowedImages.includes(file.mimetype) || /\.(png|jpe?g|webp|gif)$/i.test(file.originalname)) {
       cb(null, true);
@@ -158,6 +136,7 @@ async function startServer() {
 
     next();
   }, express.static(uploadRoot));
+  app.use("/curriculos", express.static(curriculumRoot));
 
   app.get("/api/public/manifest", (_req, res) => {
     res.json(readManifest());
@@ -190,34 +169,10 @@ async function startServer() {
     "/api/admin/upload",
     requireAdminAuth,
     upload.fields([
-      { name: "curriculoPt", maxCount: 1 },
-      { name: "curriculoEn", maxCount: 1 },
       { name: "certificadoArquivo", maxCount: 1 },
     ]),
     (req, res) => {
       const manifest = readManifest();
-
-      if (req.files && "curriculoPt" in req.files && req.files.curriculoPt?.[0]) {
-        const file = req.files.curriculoPt[0];
-        manifest.curriculos.pt = {
-          name: file.originalname,
-          type: file.mimetype || "application/pdf",
-          size: file.size,
-          url: "/uploads/curriculos/curriculo-pt.pdf",
-          uploadedAt: new Date().toISOString(),
-        };
-      }
-
-      if (req.files && "curriculoEn" in req.files && req.files.curriculoEn?.[0]) {
-        const file = req.files.curriculoEn[0];
-        manifest.curriculos.en = {
-          name: file.originalname,
-          type: file.mimetype || "application/pdf",
-          size: file.size,
-          url: "/uploads/curriculos/curriculo-en.pdf",
-          uploadedAt: new Date().toISOString(),
-        };
-      }
 
       if (req.files && "certificadoArquivo" in req.files && req.files.certificadoArquivo?.[0]) {
         const file = req.files.certificadoArquivo[0];

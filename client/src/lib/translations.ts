@@ -11,9 +11,9 @@ export const translations = {
     welcome: "Bem-vindo ao meu portfólio",
     greeting: "Olá, sou",
     name: "Ytallo Gabriel",
-    title: "Desenvolvedor Full-Stack & Empreendedor",
+    title: "Software Engineer, empreendedor e criador.",
     description:
-      "apaixonado por criar soluções inovadoras com tecnologia. Trabalho com React, Node.js, Python e muito mais.",
+      "Gosto de entender problemas, escrever código e transformar ideias em algo que realmente funcione. Construo produtos e soluções envolvendo Full-Stack, IA, automação e tecnologia, sempre com a cabeça no próximo projeto. Não quero apenas usar tecnologia. Quero construir com ela.",
     viewProjects: "Ver Projetos",
     contactMe: "Entrar em Contato",
     years: "Anos",

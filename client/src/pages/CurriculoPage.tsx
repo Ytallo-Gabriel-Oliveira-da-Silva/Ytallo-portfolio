@@ -1,6 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowLeft, Download, FileText, Globe, Languages } from "lucide-react";
+
+const CURRICULO_ASSETS = {
+  pt: {
+    image: "/curriculos/imgs/curriculo-PTBR-img.jpg",
+    pdf: "/curriculos/pdfs/Curr%C3%ADculo-pt-Br.PDF",
+    fileName: "curriculo-pt-br.pdf",
+  },
+  en: {
+    image: "/curriculos/imgs/curriculo-ingles-img.jpg",
+    pdf: "/curriculos/pdfs/curriculum-ytallo-EN.PDF",
+    fileName: "curriculum-ytallo-en.pdf",
+  },
+} as const;
 
 const curriculoData = {
   pt: {
@@ -101,92 +114,26 @@ const curriculoData = {
   },
 };
 
-function createCurriculoPreviewSvg(lang: "pt" | "en") {
-  const data = curriculoData[lang];
-  const sections = [
-    { title: data.sections.contato, items: data.contact },
-    { title: data.sections.formacao, items: data.formation },
-    { title: data.sections.habilidades, items: data.skills },
-    { title: data.sections.experiencia, items: data.experience },
-    { title: data.sections.projetos, items: data.projects },
-  ];
-
-  const body = sections
-    .map(
-      (section) => `
-        <g>
-          <rect x="40" y="${section.title === data.sections.contato ? 130 : 260}" width="520" height="40" rx="12" fill="#dfeaff"/>
-          <text x="62" y="${section.title === data.sections.contato ? 156 : 286}" fill="#0b1220" font-size="18" font-weight="700" font-family="Arial, sans-serif">${section.title}</text>
-          ${section.items
-            .map((item, index) => {
-              const y = (section.title === data.sections.contato ? 175 : 305) + index * 24;
-              return `<text x="62" y="${y}" fill="#1d2a3a" font-size="12" font-family="Arial, sans-serif">• ${item}</text>`;
-            })
-            .join("")}
-        </g>
-      `
-    )
-    .join("");
-
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
-      <defs>
-        <linearGradient id="bg" x1="0" x2="1">
-          <stop offset="0%" stop-color="#091220"/>
-          <stop offset="100%" stop-color="#0f172a"/>
-        </linearGradient>
-      </defs>
-      <rect width="900" height="1200" fill="url(#bg)"/>
-      <rect x="0" y="0" width="900" height="140" fill="#0d1a2b"/>
-      <text x="54" y="72" fill="#ffffff" font-size="28" font-weight="700" font-family="Arial, sans-serif">${data.headline}</text>
-      <text x="54" y="104" fill="#dbeafe" font-size="14" font-family="Arial, sans-serif">${data.summary}</text>
-      ${body}
-      <text x="54" y="1130" fill="#94a3b8" font-size="12" font-family="Arial, sans-serif">${data.footer}</text>
-    </svg>
-  `;
-
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
 export default function CurriculoPage() {
   const [, setLocation] = useLocation();
   const [language, setLanguage] = useState<"pt" | "en">("pt");
-  const [imageUrl, setImageUrl] = useState<string>(createCurriculoPreviewSvg("pt"));
 
   const curriculo = curriculoData[language];
+  const assets = CURRICULO_ASSETS[language];
 
-  useEffect(() => {
-    let isMounted = true;
+  const downloadPdf = async () => {
+    const response = await fetch(assets.pdf, { cache: "no-store" });
+    if (!response.ok) return;
 
-    fetch("/api/public/manifest")
-      .then((response) => (response.ok ? response.json() : null))
-      .then((manifest) => {
-        if (!isMounted) return;
-
-        const uploadedImage = manifest?.curriculos?.[language]?.imageUrl;
-        const uploadedPdf = manifest?.curriculos?.[language]?.url;
-
-        if (uploadedImage) {
-          setImageUrl(uploadedImage);
-          return;
-        }
-
-        if (uploadedPdf && uploadedPdf.toLowerCase().endsWith(".png") || uploadedPdf?.toLowerCase().endsWith(".jpg") || uploadedPdf?.toLowerCase().endsWith(".jpeg") || uploadedPdf?.toLowerCase().endsWith(".webp")) {
-          setImageUrl(uploadedPdf);
-          return;
-        }
-
-        setImageUrl(createCurriculoPreviewSvg(language));
-      })
-      .catch(() => {
-        if (!isMounted) return;
-        setImageUrl(createCurriculoPreviewSvg(language));
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [language]);
+    const fileUrl = URL.createObjectURL(await response.blob());
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = assets.fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(fileUrl);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground px-4 py-8 md:px-6">
@@ -251,8 +198,8 @@ export default function CurriculoPage() {
 
           <div className="overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-[#0f172a] to-[#0b1220] p-3 shadow-[0_0_30px_rgba(0,217,255,0.08)]">
             <img
-              src={imageUrl}
-              alt="Pré-visualização do currículo"
+              src={assets.image}
+              alt={`Currículo ${language === "pt" ? "em português" : "em inglês"}`}
               className="h-auto w-full rounded-xl border border-white/10 bg-background object-contain"
             />
           </div>

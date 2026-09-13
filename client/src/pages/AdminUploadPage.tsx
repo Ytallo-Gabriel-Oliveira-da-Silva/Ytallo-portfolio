@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, FileImage, FileUp, Lock, ShieldCheck, UploadCloud } from "lucide-react";
+import { ArrowLeft, FileImage, Lock, ShieldCheck, UploadCloud } from "lucide-react";
 
 type UploadMeta = {
   name: string;
@@ -20,10 +20,6 @@ type CertificateItem = UploadMeta & {
 };
 
 type ManifestState = {
-  curriculos: {
-    pt: UploadMeta | null;
-    en: UploadMeta | null;
-  };
   certificados: Record<string, CertificateItem>;
 };
 
@@ -69,7 +65,6 @@ const normalizeSearchValue = (value: string | undefined | null) =>
 export default function AdminUploadPage() {
   const [, setLocation] = useLocation();
   const [manifest, setManifest] = useState<ManifestState>({
-    curriculos: { pt: null, en: null },
     certificados: {},
   });
   const [certificateId, setCertificateId] = useState("");
@@ -138,16 +133,6 @@ export default function AdminUploadPage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (key === "curriculoPt") {
-      setManifest((current) => ({ ...current, curriculos: { ...current.curriculos, pt: { name: file.name, size: file.size, type: file.type || "application/pdf" } } }));
-      return;
-    }
-
-    if (key === "curriculoEn") {
-      setManifest((current) => ({ ...current, curriculos: { ...current.curriculos, en: { name: file.name, size: file.size, type: file.type || "application/pdf" } } }));
-      return;
-    }
-
     if (key === "certificadoArquivo") {
       setSelectedFile({ name: file.name, size: file.size, type: file.type || "image/jpeg" });
       setCertificateHasImage(true);
@@ -201,12 +186,8 @@ export default function AdminUploadPage() {
   const handleUpload = async () => {
     const formData = new FormData();
 
-    const fileInput = document.getElementById("curriculoPt") as HTMLInputElement | null;
-    const fileInputEn = document.getElementById("curriculoEn") as HTMLInputElement | null;
     const certInput = document.getElementById("certificadoArquivo") as HTMLInputElement | null;
 
-    if (fileInput?.files?.[0]) formData.append("curriculoPt", fileInput.files[0]);
-    if (fileInputEn?.files?.[0]) formData.append("curriculoEn", fileInputEn.files[0]);
     if (certInput?.files?.[0]) formData.append("certificadoArquivo", certInput.files[0]);
 
     if (certificateId.trim()) formData.append("certificadoId", certificateId.trim());
@@ -216,7 +197,7 @@ export default function AdminUploadPage() {
     if (certificateStatus.trim()) formData.append("certificadoStatus", certificateStatus.trim());
     formData.append("certificadoHasImage", String(certificateHasImage));
 
-    if (!formData.has("curriculoPt") && !formData.has("curriculoEn") && !formData.has("certificadoArquivo")) {
+    if (!formData.has("certificadoArquivo")) {
       setStatus("Selecione pelo menos um arquivo antes de enviar.");
       return;
     }
@@ -243,9 +224,6 @@ export default function AdminUploadPage() {
       setSelectedCertificateId(null);
 
       if (certInput) certInput.value = "";
-      if (fileInput) fileInput.value = "";
-      if (fileInputEn) fileInputEn.value = "";
-
       const refreshed = await fetch("/api/admin/manifest", { headers: { Authorization: `Bearer ${token}` } });
       const latest = await refreshed.json();
       setManifest(latest);
@@ -340,37 +318,6 @@ export default function AdminUploadPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-background/40 p-5">
-            <div className="mb-4 flex items-center gap-3 text-primary">
-              <FileUp size={18} />
-              <h2 className="text-lg font-bold">Currículos</h2>
-            </div>
-
-            {[
-              { key: "curriculoPt", label: "Currículo — Português (Imagem)" },
-              { key: "curriculoEn", label: "Currículo — Inglês (Imagem)" },
-            ].map((field) => (
-              <div key={field.key} className="mb-5 rounded-xl border border-border bg-card p-4">
-                <label className="mb-2 block text-sm font-medium text-foreground">{field.label}</label>
-                <input
-                  id={field.key}
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
-                  onChange={(event) => handleFileChange(event, field.key)}
-                  className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary"
-                />
-
-                {manifest.curriculos[field.key === "curriculoPt" ? "pt" : "en"] && (
-                  <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-foreground">
-                    <p><strong>Arquivo:</strong> {manifest.curriculos[field.key === "curriculoPt" ? "pt" : "en"]?.name}</p>
-                    <p><strong>Tipo:</strong> {manifest.curriculos[field.key === "curriculoPt" ? "pt" : "en"]?.type}</p>
-                    <p><strong>Tamanho:</strong> {formatFileSize(manifest.curriculos[field.key === "curriculoPt" ? "pt" : "en"]?.size ?? 0)}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
           <div className="rounded-2xl border border-border bg-background/40 p-5">
             <div className="mb-4 flex items-center gap-3 text-primary">
               <UploadCloud size={18} />

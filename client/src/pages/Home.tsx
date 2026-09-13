@@ -24,6 +24,7 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const [scrollY, setScrollY] = useState(0);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [contactTrap, setContactTrap] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const sendMessageMutation = trpc.contact.sendMessage.useMutation();
@@ -527,7 +528,7 @@ export default function Home() {
               e.preventDefault();
               setIsSubmitting(true);
               try {
-                const result = await sendMessageMutation.mutateAsync(formData);
+                const result = await sendMessageMutation.mutateAsync({ ...formData, website: contactTrap });
                 if (result.success) {
                   toast.success(result.message);
                   setFormData({ name: "", email: "", message: "" });
@@ -572,6 +573,18 @@ export default function Home() {
                   disabled={isSubmitting}
                   className="w-full px-4 py-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 resize-none disabled:opacity-50"
                   required
+                />
+              </div>
+              <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={contactTrap}
+                  onChange={(e) => setContactTrap(e.target.value)}
                 />
               </div>
               <button
